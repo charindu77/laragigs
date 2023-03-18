@@ -41,7 +41,7 @@
                     </a>
                 </li>
                 <li>
-                    <form method="POST" action="{{ route('logout') }}" class="inline">
+                    <form method="POST" action="{{ route('users.logout') }}" class="inline">
                         @csrf
                         <button type="submit">
                                 <i class="fa-solid fa-door-closed">

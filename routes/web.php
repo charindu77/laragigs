@@ -1,10 +1,10 @@
 <?php
 
-use App\Models\Listing;
-use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\ListingController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\RegistrationController;
+use App\Http\Controllers\Auth\AuthenticationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,26 +16,28 @@ use App\Http\Controllers\ListingController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
 Route::middleware(['guest'])->group(function () {
     // Listing home
+    // Route::as('listings.')->group(function(){
+    //     Route::resource('listings',ListingController::class)->only(['index','show']);
+    // });
     Route::get('/', [ListingController::class, 'index'])
         ->name('listings');
+    // user 
+    Route::view('/register', 'users.create-user')->name('register');
+    Route::view('/login', 'users.login-user')->name('login');
+
     // show listing
     Route::get('/listings/{listing}', [ListingController::class, 'show'])
         ->name('listing-show');
 
-    // user 
-    Route::get('/register', [UserController::class, 'create'])
-        ->name('register');
+    Route::post('/authenticate', AuthenticationController::class)
+        ->name('users.authenticate');
 
-    Route::post('/users', [UserController::class, 'store'])
-        ->name('users-store');
-
-    Route::get('/login', [UserController::class, 'login'])
-        ->name('login');
-
-    Route::post('/authenticate', [UserController::class, 'authenticate'])
-        ->name('authenticate');
+    Route::post('/users', RegistrationController::class)
+        ->name('users.store');
 });
 
 ROute::middleware(['auth'])->group(function () {
@@ -59,7 +61,6 @@ ROute::middleware(['auth'])->group(function () {
         ->name('listing-destroy');
 
     // logout user
-    Route::post('/logout', [UserController::class, 'logout'])
-        ->middleware(['auth'])
-        ->name('logout');
+    Route::post('/logout', LogoutController::class)
+        ->name('users.logout');
 });

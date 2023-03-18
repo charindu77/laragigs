@@ -2,22 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Listing;
-use App\Http\Requests\ListingRequest;
-use App\Http\Requests\UpdatelistingRequest;
-use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Scalar\DNumber;
+use App\Http\Requests\ListingRequest;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\UpdatelistingRequest;
 
 class ListingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        // dd(request('tag'));
         return view(
             'listings.home',
             [
