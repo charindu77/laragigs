@@ -42,7 +42,7 @@
                     </a>
                 </li>
                 <li>
-                    <form method="POST" action="<?php echo e(route('logout')); ?>" class="inline">
+                    <form method="POST" action="<?php echo e(route('users.logout')); ?>" class="inline">
                         <?php echo csrf_field(); ?>
                         <button type="submit">
                                 <i class="fa-solid fa-door-closed">
