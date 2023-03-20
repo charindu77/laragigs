@@ -11,18 +11,45 @@ class AccessPublicRoutesTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test**/
-    public function test_access_to_public_routes()
+    public function __construct($name = null, array $data = array(), $dataName = "")
     {
-        $routes = Route::getRoutes();
-        foreach ($routes as $route) {
-            array_map(function ($middleware) use ($route) {
-                // $explodedURI = str_split($route->uri());
-                $explodedURI = preg_match('/[\{\}]/',$route->uri());
-                if ($middleware == 'guest' && in_array('GET', $route->methods()) && !$explodedURI) {
-                    $this->get(route($route->getName()))->assertOk();
-                }
-            }, $route->middleware());
-        }
+        parent::__construct($name, $data, $dataName);
+        $this->createApplication();
+
+    }
+
+    /** 
+     * @test
+     * @dataProvider publicUri
+     * **/
+    public function test_access_to_public_routes($uri)
+    {
+        $this->get($uri)->assertOk();
+    }
+
+    public function publicUri(): array
+    {
+        return array_values(
+                collect(Route::getRoutes())
+                ->filter(fn($route) => in_array('GET', $route->methods()))
+                ->reject(fn($route) => in_array('auth', $route->gatherMiddleware()))
+                ->reject(fn($route) => preg_match('/[\{\}]/', $route->uri()))
+                ->reject(fn($route) => in_array(
+                    $route->uri(),
+                    [
+                        'sanctum/csrf-cookie',
+                        '_ignition/health-check',
+                        'api/user',
+                        '_debugbar/open',
+                        '_debugbar/clockwork/{id}',
+                        '_debugbar/assets/stylesheets',
+                        '_debugbar/assets/javascript',
+                    ]
+                )
+                )
+                ->map(function ($route) {
+                    return [$route->uri];
+                })->all()
+        );
     }
 }
