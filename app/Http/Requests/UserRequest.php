@@ -31,13 +31,7 @@ class UserRequest extends FormRequest
                 'required',
                 'confirmed',
                 Password::min(4)
-                    // ->letters()
-                    // ->mixedCase()
-                    // ->numbers()
-                    // ->symbols()
-                    // ->uncompromised()
             ],
-            // 'password-confirmation'=>['required','same:password'],
         ];
     }
 }

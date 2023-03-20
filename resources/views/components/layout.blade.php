@@ -36,7 +36,7 @@
                     </span>
                 </li>
                 <li>
-                    <a href="{{ route('listing-manage') }}" class="hover:text-laravel fa-solid fa-gear">
+                    <a href="{{ route('listing.manage') }}" class="hover:text-laravel fa-solid fa-gear">
                         Manage Listings
                     </a>
                 </li>
@@ -52,11 +52,11 @@
                 </li>
             @else
                 <li>
-                    <a href="{{ route('register') }}" class="hover:text-laravel"><i class="fa-solid fa-user-plus"></i>
+                    <a href="{{ route('users.register') }}" class="hover:text-laravel"><i class="fa-solid fa-user-plus"></i>
                         Register</a>
                 </li>
                 <li>
-                    <a href="{{ route('login') }}" class="hover:text-laravel"><i
+                    <a href="{{ route('users.login') }}" class="hover:text-laravel"><i
                             class="fa-solid fa-arrow-right-to-bracket"></i>
                         Login</a>
                 </li>

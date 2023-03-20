@@ -17,50 +17,39 @@ use App\Http\Controllers\Auth\AuthenticationController;
 |
 */
 
-
-Route::middleware(['guest'])->group(function () {
-    // Listing home
-    // Route::as('listings.')->group(function(){
-    //     Route::resource('listings',ListingController::class)->only(['index','show']);
-    // });
-    Route::get('/', [ListingController::class, 'index'])
-        ->name('listings');
-    // user 
-    Route::view('/register', 'users.create-user')->name('register');
-    Route::view('/login', 'users.login-user')->name('login');
-
-    // show listing
-    Route::get('/listings/{listing}', [ListingController::class, 'show'])
-        ->name('listing-show');
-
-    Route::post('/authenticate', AuthenticationController::class)
-        ->name('users.authenticate');
-
+Route:: as ('users.')->group(function () {
+    Route::view('/register', 'users.create-user')
+        ->name('register');
+    Route::view('/login', 'users.login-user')
+        ->name('login');
     Route::post('/users', RegistrationController::class)
-        ->name('users.store');
+        ->name('store');
+    Route::post('/authenticate', AuthenticationController::class)
+        ->name('authenticate');
+    Route::post('/logout', LogoutController::class)
+        ->name('logout')->middleware(['auth']);
 });
 
-ROute::middleware(['auth'])->group(function () {
-    // Manage listings
-    Route::get('/listings/manage', [ListingController::class, 'manage'])
-        ->name('listing-manage');
-    // show create a list form
-    Route::get('/create', [ListingController::class, 'create'])
-        ->name('listing-create');
-    // create a listing
-    Route::post('/listings', [ListingController::class, 'store'])
-        ->name('listing-store');
-    // show edit listing page
-    Route::get('/listings/{listing}/edit', [ListingController::class, 'edit'])
-        ->name('listing-edit');
-    // edit listing
-    Route::put('/listings/{listing}', [ListingController::class, 'update'])
-        ->name('listing-update');
-    // delete a listing
-    Route::delete('/listings/{listing}', [ListingController::class, 'destroy'])
-        ->name('listing-destroy');
+Route:: as ('listings.')->group(function () {
+    Route::get('/', [ListingController::class, 'index'])
+        ->name('index');
+    Route::get('/listings/{listing}', [ListingController::class, 'show'])
+        ->name('show');
 
-    // logout user
-    Route::post('/logout', LogoutController::class)
-        ->name('users.logout');
+    Route::middleware(['auth'])->group(
+        function () {
+            Route::get('/listings/manage', [ListingController::class, 'manage'])
+                ->name('manage');
+            Route::get('/create', [ListingController::class, 'create'])
+                ->name('create');
+            Route::post('/listings', [ListingController::class, 'store'])
+                ->name('store');
+            Route::get('/listings/{listing}/edit', [ListingController::class, 'edit'])
+                ->name('edit');
+            Route::put('/listings/{listing}', [ListingController::class, 'update'])
+                ->name('update');
+            Route::delete('/listings/{listing}', [ListingController::class, 'destroy'])
+                ->name('destroy');
+        }
+    );
 });
