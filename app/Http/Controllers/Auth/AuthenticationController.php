@@ -8,9 +8,13 @@ use App\Http\Requests\AuthUserRequest;
 
 class AuthenticationController extends Controller
 {
-    public function __invoke(AuthUserRequest $request)
+    public function create()
     {
-        if(auth()->attempt($request->validated())){
+        return view('users.login-user');
+    }
+    public function store(AuthUserRequest $request)
+    {
+        if (auth()->attempt($request->validated())) {
             $request->session()->regenerate();
 
             return redirect()->intended()->with('success', 'Welcome ' . auth()->user()->name);
