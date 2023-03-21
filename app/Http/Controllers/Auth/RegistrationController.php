@@ -9,7 +9,11 @@ use App\Http\Controllers\Controller;
 
 class RegistrationController extends Controller
 {
-    public function __invoke(UserRequest $request)
+    public function create()
+    {
+        return view('users.create-user');
+    }
+    public function store(UserRequest $request)
     {
         $user=User::create($request->validated());
 

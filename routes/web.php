@@ -18,13 +18,13 @@ use App\Http\Controllers\Auth\AuthenticationController;
 */
 
 Route:: as ('users.')->group(function () {
-    Route::view('/register', 'users.create-user')
+    Route::get('/register', [RegistrationController::class, 'create'])
         ->name('register');
-    Route::view('/login', 'users.login-user')
-        ->name('login');
-    Route::post('/users', RegistrationController::class)
+    Route::post('/users', [RegistrationController::class, 'store'])
         ->name('store');
-    Route::post('/authenticate', AuthenticationController::class)
+    Route::get('/login', [AuthenticationController::class, 'create'])
+        ->name('login');
+    Route::post('/authenticate', [AuthenticationController::class, 'store'])
         ->name('authenticate');
     Route::post('/logout', LogoutController::class)
         ->name('logout')->middleware(['auth']);
