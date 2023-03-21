@@ -28,16 +28,15 @@ class UserRequest extends FormRequest
             'name'=>['required'],
             'email'=>['required','unique:users,email'],
             'password'=>[
-                'required',
-                'confirmed',
-                Password::min(4)
+                'required', 
+                Password::min(8)
                     // ->letters()
                     // ->mixedCase()
                     // ->numbers()
                     // ->symbols()
                     // ->uncompromised()
             ],
-            // 'password-confirmation'=>['required','same:password'],
+            'password-confirmation'=>['required','same:password'],
         ];
     }
 }

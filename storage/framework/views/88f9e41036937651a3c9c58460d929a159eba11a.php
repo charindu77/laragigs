@@ -24,7 +24,7 @@
                 <p class="mb-4">Log in to post gigs</p>
             </header>
 
-            <form method="POST" action="<?php echo e(route('users.authenticate')); ?>">
+            <form method="POST" action="<?php echo e(route('authenticate')); ?>">
                 <?php echo csrf_field(); ?>
                 <div class="mb-6">
                     <label for="email" class="inline-block text-lg mb-2">Email</label>
