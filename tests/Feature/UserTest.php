@@ -10,7 +10,7 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test* */
+    /** @test **/
     public function user_can_register_with_valid_data()
     {
         $this->post(
@@ -22,7 +22,7 @@ class UserTest extends TestCase
                 'password_confirmation' => 'password'
             ]
         )
-            ->assertRedirect(route('listings'))
+            ->assertRedirect(route('listings.index'))
             ->assertSessionHas('success', 'User: Jon is created successfully and logged in');
 
         $user = User::where('email', 'test@mail.com')->first();
@@ -32,7 +32,7 @@ class UserTest extends TestCase
     /**
      * @test
      * @dataProvider nameInputValidation
-     * */
+     **/
     public function Registration_form_fields_validation($name, $email, $password, $passwordConf)
     {
         $response = $this->post(
@@ -43,7 +43,9 @@ class UserTest extends TestCase
                 'password' => $password,
                 'password_confirmation' => $passwordConf,
             ]
-        )->assertInvalid();
+        );
+
+        $response->assertInvalid();
     }
 
     public function nameInputValidation()
@@ -73,7 +75,7 @@ class UserTest extends TestCase
                 'password' => 'password',
                 'password_confirmation' => ''
             ],
-            [
+            'Password length should be more than four' => [
                 'name' => 'Jon',
                 'email' => 'test@mail.com',
                 'password' => '123',
@@ -94,27 +96,27 @@ class UserTest extends TestCase
             'email' => 'joe$@test.com',
             'password' => 'password'
         ])->assertStatus(302)
-        ->assertRedirect('/')
-        ->assertSessionHas('success');
+            ->assertRedirect('/')
+            ->assertSessionHas('success');
 
         $this->assertAuthenticatedAs($user);
     }
 
-/** @test */
-public function Loggedin_user_can_logout()
-{
-    $user = User::factory()->create([
-        'name' => 'Joe',
-        'email' => 'joe$@test.com',
-        'password' => 'password'
-    ]);
+    /** @test */
+    public function Loggedin_user_can_logout()
+    {
+        $user = User::factory()->create([
+            'name' => 'Joe',
+            'email' => 'joe$@test.com',
+            'password' => 'password'
+        ]);
 
-    auth()->login($user);
+        auth()->login($user);
 
-    $this->post(route('users.logout'),[$user])
-    ->assertStatus(302)
-    ->assertRedirect('/');
+        $this->post(route('users.logout'), [$user])
+            ->assertStatus(302)
+            ->assertRedirect('/');
 
-    $this->assertNotTrue($this->isAuthenticated());
-}
+        $this->assertNotTrue($this->isAuthenticated());
+    }
 }
