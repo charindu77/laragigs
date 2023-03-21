@@ -74,7 +74,7 @@ unset($__errorArgs, $__bag); ?>
                 <div class="mt-8">
                     <p>
                         Don't have an account?
-                        <a href="<?php echo e(route('register')); ?>" class="text-laravel">Register</a>
+                        <a href="<?php echo e(route('users.register')); ?>" class="text-laravel">Register</a>
                     </p>
                 </div>
             </form>

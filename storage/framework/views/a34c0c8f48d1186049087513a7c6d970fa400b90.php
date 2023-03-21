@@ -37,7 +37,7 @@
                     </span>
                 </li>
                 <li>
-                    <a href="<?php echo e(route('listing-manage')); ?>" class="hover:text-laravel fa-solid fa-gear">
+                    <a href="<?php echo e(route('listing.manage')); ?>" class="hover:text-laravel fa-solid fa-gear">
                         Manage Listings
                     </a>
                 </li>
@@ -53,11 +53,11 @@
                 </li>
             <?php else: ?>
                 <li>
-                    <a href="<?php echo e(route('register')); ?>" class="hover:text-laravel"><i class="fa-solid fa-user-plus"></i>
+                    <a href="<?php echo e(route('users.register')); ?>" class="hover:text-laravel"><i class="fa-solid fa-user-plus"></i>
                         Register</a>
                 </li>
                 <li>
-                    <a href="<?php echo e(route('login')); ?>" class="hover:text-laravel"><i
+                    <a href="<?php echo e(route('users.login')); ?>" class="hover:text-laravel"><i
                             class="fa-solid fa-arrow-right-to-bracket"></i>
                         Login</a>
                 </li>
