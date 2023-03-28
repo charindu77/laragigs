@@ -24,6 +24,7 @@ class ListingFactory extends Factory
             'email' => fake()->companyEmail,
             'website' => fake()->url,
             'description' => fake()->paragraph(5),
+            'is_published'=>fake()->boolean
         ];
     }
 }

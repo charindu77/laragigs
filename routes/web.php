@@ -31,13 +31,11 @@ Route:: as ('users.')->group(function () {
 });
 
 Route:: as ('listings.')->group(function () {
-    Route::get('/', [ListingController::class, 'index'])
-        ->name('index');
-    Route::get('/listings/{listing}', [ListingController::class, 'show'])
-        ->name('show');
 
     Route::middleware(['auth'])->group(
         function () {
+            Route::put('/listings/{listing}/publish', [ListingController::class, 'publish'])
+                ->name('publish');
             Route::get('/listings/manage', [ListingController::class, 'manage'])
                 ->name('manage');
             Route::get('/create', [ListingController::class, 'create'])
@@ -52,4 +50,10 @@ Route:: as ('listings.')->group(function () {
                 ->name('destroy');
         }
     );
+
+    Route::get('/', [ListingController::class, 'index'])
+        ->name('index');
+    Route::get('/listings/{listing}', [ListingController::class, 'show'])
+        ->name('show');
+
 });

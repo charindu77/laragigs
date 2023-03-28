@@ -37,7 +37,7 @@
                     </span>
                 </li>
                 <li>
-                    <a href="<?php echo e(route('listing.manage')); ?>" class="hover:text-laravel fa-solid fa-gear">
+                    <a href="<?php echo e(route('listings.manage')); ?>" class="hover:text-laravel fa-solid fa-gear">
                         Manage Listings
                     </a>
                 </li>

@@ -23,14 +23,16 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        $user = User::factory()->create([
-            'name'=> 'Jon Doe',
-            'email'=>'jon@gmail.com',
-            'password' =>'123123123'
-        ]);
+        // $user = User::factory()->create([
+        //     'name'=> 'Jon Doe',
+        //     'email'=>'jon@gmail.com',
+        //     'password' =>'123123123'
+        // ]);
 
-        Listing::factory(12)->create([
-            'user_id'=> $user->id,
+        Listing::factory(1000)->create([
+            'user_id' => User::factory()->create([
+                'password' => 'password'
+            ])
         ]);
     }
 }

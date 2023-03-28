@@ -11,7 +11,7 @@
         </p>
         <div>
             @auth
-                <a href="{{ route('listing.create') }}"
+                <a href="{{ route('listings.create') }}"
                     class="inline-block border-2 border-white text-white py-2 px-4 rounded-xl uppercase mt-2 hover:text-black hover:border-black">
                     List a Gig</a>
             @else

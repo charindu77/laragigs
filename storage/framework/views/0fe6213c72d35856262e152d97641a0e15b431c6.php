@@ -11,7 +11,7 @@
         </p>
         <div>
             <?php if(auth()->guard()->check()): ?>
-                <a href="<?php echo e(route('listing.create')); ?>"
+                <a href="<?php echo e(route('listings.create')); ?>"
                     class="inline-block border-2 border-white text-white py-2 px-4 rounded-xl uppercase mt-2 hover:text-black hover:border-black">
                     List a Gig</a>
             <?php else: ?>
