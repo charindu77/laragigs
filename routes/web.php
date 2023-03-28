@@ -57,3 +57,4 @@ Route:: as ('listings.')->group(function () {
         ->name('show');
 
 });
+

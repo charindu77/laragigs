@@ -8,8 +8,14 @@ use Illuminate\Support\Facades\Cache;
 
 class ListingController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
+        // dd(request('tag'));
         return view(
             'listings.home',
             [
