@@ -16,7 +16,7 @@ class ListingController extends Controller
                 'heading' => 'Latest Listings',
                 'listings' => Cache::remember(
                     'listings',
-                    now()->addSeconds(30),
+                    now()->addDay(),
                     function () {
                         return Listing::latest()
                             ->published()
