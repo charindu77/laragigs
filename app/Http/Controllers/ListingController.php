@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Listing;
 use App\Http\Requests\ListingRequest;
-use App\Http\Requests\UpdatelistingRequest;
-use Illuminate\Support\Facades\Storage;
-use PhpParser\Node\Scalar\DNumber;
+use Illuminate\Support\Facades\Cache;
 
 class ListingController extends Controller
 {
@@ -22,27 +20,25 @@ class ListingController extends Controller
             'listings.home',
             [
                 'heading' => 'Latest Listings',
-                'listings' => Listing::latest()->filter(request(['tag', 'search']))->paginate(6),
+                'listings' => Cache::remember(
+                    'listings',
+                    now()->addSeconds(30),
+                    function () {
+                        return Listing::latest()
+                            ->published()
+                            ->filter(request(['tag', 'search']))
+                            ->paginate(50);
+                    }
+                )
             ]
         );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('listings.create-listing');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\ListingRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(ListingRequest $request)
     {
         $validatedFormData = $request->validated();
@@ -51,17 +47,13 @@ class ListingController extends Controller
             $validatedFormData['logo'] = $request->validated('logo')->Store('logos', 'public');
         }
 
-        Listing::create($validatedFormData);
+        // Listing::create($validatedFormData);
+        auth()->user()->listings()->create($validatedFormData);
 
         return redirect('/')->with('success', 'Listing is created successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\listing  $listing
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Listing $listing)
     {
         return view('listings.show-listing', [
@@ -69,12 +61,7 @@ class ListingController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\listing  $listing
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(listing $listing)
     {
         return view('listings.edit-listing', [
@@ -82,13 +69,6 @@ class ListingController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdatelistingRequest  $request
-     * @param  \App\Models\listing  $listing
-     * @return \Illuminate\Http\Response
-     */
     public function update(ListingRequest $request, Listing $listing)
     {
         if (auth()->id() != $listing->user->id) {
@@ -106,15 +86,9 @@ class ListingController extends Controller
 
         $listing->update($validatedFormData);
 
-        return back()->with('success', 'Listing is updated successfully!');
+        return redirect(route('listings.show', [$listing]))->with('success', 'Listing is updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\listing  $listing
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Listing $listing)
     {
         if (auth()->id() != $listing->user->id) {
@@ -130,8 +104,19 @@ class ListingController extends Controller
 
     public function manage()
     {
-        return view('listings.manage', [
-            'listings' => auth()->user()->listings()->latest()->simplePaginate(6),
-        ]);
+        $listings = auth()->user()->listings()->filter(request(['tag', 'search', 'show']))->latest()->paginate(25);
+        return view('listings.manage', compact(['listings']));
+    }
+
+    public function publish(Listing $listing)
+    {
+        if (auth()->id() != $listing->user->id) {
+            return abort(403);
+        }
+
+        $listing->update(['is_published'=>!$listing->is_published]);
+
+        $status = ($listing->is_published) ? 'published':'unpublished';
+        return back()->with('success',  "The listing is {$status} successfully!");
     }
 }

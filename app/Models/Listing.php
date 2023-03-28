@@ -8,24 +8,45 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Listing extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = ['title','tags','company','location','email','website','logo','description'];
+    protected $fillable = [
+        'title',
+        'tags',
+        'company',
+        'location',
+        'email',
+        'website',
+        'logo',
+        'description',
+        'is_published'
+    ];
 
     public function scopeFilter($query, array $filters)
     {
-        if($filters['tag'] ?? false){
+        if ($filters['tag'] ?? false) {
             $query->where('tags', 'like', '%' . $filters['tag'] . '%');
         }
-        if($filters['search'] ?? false){
+        if ($filters['search'] ?? false) {
             $query->where('title', 'like', '%' . request('search') . '%')
-            ->orwhere('description', 'like', '%' . request('search') . '%')
-            ->orwhere('tags', 'like', '%' . request('search') . '%');
+                ->orwhere('description', 'like', '%' . request('search') . '%')
+                ->orwhere('tags', 'like', '%' . request('search') . '%');
+        }
+        if ($filters['show'] ?? false) {
+            if ($filters['show'] == 1)
+                $query->published();
+            if ($filters['show'] == 2)
+                $query->published(false);
         }
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function scopePublished($query, ?bool $option = true)
+    {
+        return $query->where('is_published', $option);
     }
 }
