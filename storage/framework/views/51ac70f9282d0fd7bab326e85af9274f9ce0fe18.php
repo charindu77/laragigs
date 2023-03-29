@@ -106,10 +106,10 @@
                             </tr>
                         <?php endif; ?>
                     </tbody>
-                    </table>
-                    <div class="flex justify-center font-semibold text-gray-900">
-                        <div scope="row" class="px-6 py-3 text-base w-1/2"> <?php echo e($listings->links()); ?></div>
-                    </div>
+                </table>
+                <div class="flex justify-center font-semibold text-gray-900">
+                    <div scope="row" class="px-6 py-3 text-base w-1/2"> <?php echo e($listings->links()); ?></div>
+                </div>
             </div>
 
          <?php echo $__env->renderComponent(); ?>
